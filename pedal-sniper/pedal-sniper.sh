@@ -27,5 +27,7 @@ if [ "$newProductA" == "$oldProductA" ] || [ "$newProductA" == "$oldProductB" ] 
 	echo "✅ Nothing new this time"
 else
 	echo "🚨 NEW PEDAL ALERT"
+	# TODO
+	# - Notify me somehow (Slack?)
 	echo "$(curl -o "$oldFile" "$url")" # Overwrite old file with updated HTML for next comparison
 fi
