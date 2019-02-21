@@ -24,10 +24,11 @@ echo "$newProductB"
 
 # Check if latest product title in the old file matches the new one
 if [ "$newProductA" == "$oldProductA" ] || [ "$newProductA" == "$oldProductB" ] || [ "$newProductB" == "$oldProductA" ] || [ "$newProductB" == "$oldProductB" ]; then
-	echo "✅ Nothing new this time"
+	printf "\n\n Nothing new this time \n\n\n"
 else
-	echo "🚨 NEW PEDAL ALERT"
+	printf "\n\n NEW PEDAL ALERT \n\n\n"
 	# TODO
 	# - Notify me somehow (Slack?)
-	echo "$(curl -o "$oldFile" "$url")" # Overwrite old file with updated HTML for next comparison
 fi
+
+curl -o "$originalFile" "$url" # Overwrite old file with updated HTML for next comparison
