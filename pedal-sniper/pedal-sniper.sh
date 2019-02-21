@@ -27,8 +27,7 @@ if [ "$newProductA" == "$oldProductA" ] || [ "$newProductA" == "$oldProductB" ] 
 	printf "\n\n Nothing new this time \n\n\n"
 else
 	printf "\n\n NEW PEDAL ALERT \n\n\n"
-	# TODO
-	# - Notify me somehow (Slack?)
+	/usr/bin/open -a "/Applications/Google Chrome.app" "$url" # Open website in Chrome if there's something new
 fi
 
 curl -o "$originalFile" "$url" # Overwrite old file with updated HTML for next comparison
