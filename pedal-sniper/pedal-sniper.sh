@@ -18,6 +18,5 @@ if [[ "$newProduct" == "$oldProduct" ]]; then
 else
 	printf "NEW PEDAL ALERT!"
 	/usr/bin/open -a "/Applications/Google Chrome.app" "$url" # Open website in Chrome if there's something new
+	curl -s -o "$oldFile" "$url" # Overwrite old file with latest HTML for next comparison
 fi
-
-curl -s -o "$oldFile" "$url" # Overwrite old file with updated HTML for next comparison
