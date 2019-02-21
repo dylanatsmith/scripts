@@ -8,9 +8,12 @@ newFile="new.html"
 # Save the URL as a new file
 curl -s -o "$newFile" "$url"
 
-# Grab the first product from each file
-oldProduct="$(grep -A2 "class=\"product\"" "$oldFile" | head -3)"
-newProduct="$(grep -A2 "class=\"product\"" "$newFile" | head -3)"
+# Define search query
+searchQuery="class=\"product\""
+
+# Grab the first match from each file
+oldProduct="$(grep -A2 "$searchQuery" "$oldFile" | head -3)"
+newProduct="$(grep -A2 "$searchQuery" "$newFile" | head -3)"
 
 # Check if latest product title in the new file matches the old one
 if [[ "$newProduct" == "$oldProduct" ]]; then
