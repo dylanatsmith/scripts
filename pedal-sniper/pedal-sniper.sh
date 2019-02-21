@@ -1,45 +1,23 @@
 #!/bin/bash
 
-# Define URL and file to check
+# Define URL and files to check
 url="https://www.guitarguitar.co.uk/pre-owned/pedals/"
-originalFile="old.html"
+oldFile="old.html"
 newFile="new.html"
 
 # Save the URL as a new file
-echo "$(curl -o "$newFile" "$url")"
+curl -s -o "$newFile" "$url"
 
-# From the original file, grab the two possible lines the first product name can appear on
-oldProductA="$(tail -n+2418 "$originalFile" | head -n1)"
-oldProductB="$(tail -n+2429 "$originalFile" | head -n1)"
-oldProductC="$(tail -n+2465 "$originalFile" | head -n1)" # Two later lines account for possibility of pagination element
-oldProductD="$(tail -n+2476 "$originalFile" | head -n1)"
+# Grab the first product from each file
+oldProduct="$(grep -A2 "class=\"product\"" "$oldFile" | head -3)"
+newProduct="$(grep -A2 "class=\"product\"" "$newFile" | head -3)"
 
-# From the new file, grab the two possible lines the first product name can appear on
-newProductA="$(tail -n+2418 "$newFile" | head -n1)"
-newProductB="$(tail -n+2429 "$newFile" | head -n1)"
-newProductC="$(tail -n+2465 "$newFile" | head -n1)"
-newProductD="$(tail -n+2476 "$newFile" | head -n1)"
-
-# Print those lines from the files
-echo "$oldProductA"
-echo "$oldProductB"
-echo "$oldProductC"
-echo "$oldProductD"
-echo "$newProductA"
-echo "$newProductB"
-echo "$newProductC"
-echo "$newProductD"
-
-# Check if latest product title in the old file matches the new one
-# if [ "$newProductA" == "$oldProductA" ] || [ "$newProductA" == "$oldProductB" ] || [ "$newProductB" == "$oldProductA" ] || [ "$newProductB" == "$oldProductB" ]; then
-if [[ "$newProductA" =~ ^("$oldProductA"|"$oldProductB"|"$oldProductC"|"$oldProductD")$ ]] ||
-	 [[ "$newProductB" =~ ^("$oldProductA"|"$oldProductB"|"$oldProductC"|"$oldProductD")$ ]] ||
-	 [[ "$newProductC" =~ ^("$oldProductA"|"$oldProductB"|"$oldProductC"|"$oldProductD")$ ]] ||
-	 [[ "$newProductD" =~ ^("$oldProductA"|"$oldProductB"|"$oldProductC"|"$oldProductD")$ ]]; then
-	printf "\n\n Nothing new this time \n\n\n"
+# Check if latest product title in the new file matches the old one
+if [[ "$newProduct" == "$oldProduct" ]]; then
+	printf "Nothing new this time"
 else
-	printf "\n\n NEW PEDAL ALERT \n\n\n"
+	printf "NEW PEDAL ALERT!"
 	/usr/bin/open -a "/Applications/Google Chrome.app" "$url" # Open website in Chrome if there's something new
 fi
 
-curl -o "$originalFile" "$url" # Overwrite old file with updated HTML for next comparison
+curl -s -o "$oldFile" "$url" # Overwrite old file with updated HTML for next comparison
